@@ -30,23 +30,35 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(;;markdown
+   '(javascript
+     html
+     scala
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
-      auto-completion
+     auto-completion
+     csharp
+     (confluence :variables confluence-url "https://venusfashion.atlassian.net/wiki/rpc/xmlrpc")
+     (plantuml :variables
+               org-plantuml-jar-path "/opt/plantuml/plantuml.jar"
+               plantuml-jar-path "/opt/plantuml/plantuml.jar")
+     ;;ox-jira
      ;; better-defaults
      emacs-lisp
-     git
+     ;; git
      ;; markdown
-     org
-     ;;journal
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     (org :variables
+          org-enable-org-journal-support t)
+
+     (shell :variables
+             shell-default-height 30
+             shell-default-position 'bottom
+             shell-default-shell 'eshell
+             shell-enable-smarl-eshell t)
+     
      ;; spell-checking
      ;; syntax-checking
      ;; version-control
@@ -134,7 +146,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 15
+                               :size 13
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -265,7 +277,7 @@ values."
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
-  ;; (default nil)
+   ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
    ;; over any automatically added closing parenthesis, bracket, quote, etc…
@@ -292,6 +304,7 @@ values."
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
    ))
 
 (defun dotspacemacs/user-init ()
@@ -310,55 +323,60 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+  (require 'org-crypt)
+  (org-crypt-use-before-save-magic)
+  (setq org-crypt-disable-auto-save (quote ("crypt")))
+  (setq org-crypt-key nil)
 
-(require 'org-crypt)
+  (setq org-journal-dir "/mnt/c/Users/eleven/Dropbox/Work/journal/")
+  (setq org-journal-enable-encryption t)
 
-;; Automatically re-encrypt entries on save to avoid leaking decrypted
-;; information.
+  (require 'org-brain)
+  (setq org-brain-path "/mnt/c/Users/eleven/Dropbox/Work/Brain/")
+  (with-eval-after-load 'evil
+    (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
+  (setq org-id-track-globally t)
+  (setq org-id-locations-file "~/.emacs.d/.org-id-locations")
+  (setq org-brain-visualize-default-choices 'all)
+  (setq org-brain-title-max-length 12)
+  (setq org-refile-targets (quote (
+                             (org-agenda-files . (:maxlevel . 2)))))
+  (setq org-refile-use-outline-path 'file)
+  (setq org-outline-path-complete-in-steps nil)
+  (setq org-refile-allow-creating-parent-nodes 'confirm)
 
-(org-crypt-use-before-save-magic)
-(setq org-crypt-disable-auto-save (quote ("crypt")))
+  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+  (setq org-agenda-files '("/mnt/c/Users/eleven/Dropbox/Work/Todo/todo.org"
+                           "/mnt/c/Users/eleven/Dropbox/Work/remember.org"
+                           "/mnt/c/Users/eleven/Dropbox/Work/Todo/someday.org"
+                           "/mnt/c/Users/eleven/Dropbox/Work/goals.org"))
+  (add-hook 'org-mode-hook #'(lambda ()
+                               (visual-line-mode)
+                               (org-indent-mode)))
+  )
+(eval-after-load
+    'company
+  '(add-to-list 'company-backends 'company-omnisharp))
+(defun my-csharp-mode-setup ()
+  (omnisharp-mode)
+  (company-mode)
+  (flycheck-mode)
 
-;; GPG key to use for encryption
-;; Either the Key ID or set to nil to use symmetric encryption.
-(setq org-crypt-key nil)
+  (setq indent-tabs-mode nil)
+  (setq c-syntactic-indentation t)
+  (c-set-style "ellemtel")
+  (setq c-basic-offset 4)
+  (setq truncate-lines t)
+  (setq tab-width 4)
+  (setq evil-shift-width 4)
 
-;; This prevents the crypt tag from being included in inheritance.
-(setq org-tags-exclude-from-inheritance (quote ("crypt")))
+  (electic-pair-local-mode 1)
+  (local-set-key (kbd "C-c r r") 'omnisharp-run-code-action-refactoring)
+  (local-set-key (kbd "C-c C-c") 'recompile))
 
-(setq org-journal-dir "~/Dropbox/Work/")
-(setq org-journal-enable-encryption t)
-
-(require 'org-brain)
-(setq org-brain-path "~/Dropbox/Work/Brain/")
-;; For Evil users
-(with-eval-after-load 'evil
-  (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
-(setq org-id-track-globally t)
-(setq org-id-locations-file "~/.emacs.d/.org-id-locations")
-;;(push '("b" "Brain" plain (function org-brain-goto-end)
-;;        "* %i%?" :empty-lines 1)
-;;      org-capture-templates)
-(setq org-brain-visualize-default-choices 'all)
-(setq org-brain-title-max-length 12)
-)
-
+(add-hook 'csharp-mode-hook 'my-csharp-mode-setup t)
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download magit-gitflow htmlize helm-gitignore gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit ghub treepy graphql with-editor diff-hl auto-dictionary ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
@@ -369,9 +387,18 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-capture-templates
+   (quote
+    (("t" "Personal Task" entry
+      (file+headline "/mnt/c/Users/eleven/Dropbox/Work/Todo/todo.org" "Personal Tasks")
+      "* TODO %i%?")
+     ("r" "Remember" entry
+      (file+headline "/mnt/c/Users/eleven/Dropbox/Work/remember.org" "Remember")
+      "* %i%? 
+ %U"))))
  '(package-selected-packages
    (quote
-    (yasnippet-snippets company smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download magit-gitflow htmlize helm-gitignore gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit ghub treepy graphql with-editor diff-hl auto-dictionary ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (noflet mvn meghanada maven-test-mode groovy-mode groovy-imports pcache gradle-mode ensime sbt-mode scala-mode company-emacs-eclim eclim json-navigator hierarchy json-mode json-snatcher json-reformat company-tern dash-functional tern livid-mode skewer-mode js2-refactor multiple-cursors js2-mode js-doc helm-gtags ggtags counsel-gtags add-node-modules-path confluence xml-rpc plantuml-mode org-brain evil-matchit doom-modeline eldoc-eval auto-compile goto-chg projectile org-plus-contrib yasnippet-snippets xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit symon string-inflection spaceline-all-the-icons slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs request rainbow-delimiters pug-mode prettier-js popwin persp-mode pcre2el password-generator paradox packed ox-jira overseer org-projectile org-present org-pomodoro org-mime org-journal org-download org-bullets open-junk-file omnisharp neotree nameless multi-term move-text macrostep lorem-ipsum link-hint indent-guide impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-mode-manager helm-make helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot fuzzy font-lock+ flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode diminish define-word counsel-projectile company-web company-statistics column-enforce-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
