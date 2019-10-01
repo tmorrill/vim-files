@@ -350,6 +350,28 @@ you should place your code here."
                            "/mnt/c/Users/eleven/Dropbox/Work/remember.org"
                            "/mnt/c/Users/eleven/Dropbox/Work/Todo/someday.org"
                            "/mnt/c/Users/eleven/Dropbox/Work/goals.org"))
+
+  (defun tim-org-skip-subtree-if-priority (priority)
+    "Skip an agenda subtree if it has a priority of PRIORITY.
+
+PRIORITY may be on of the characters ?A ?B, or ?C."
+    (let ((subtree-end (save-excursion (org-end-of-subtree t)))
+          (pri-value (* 1000 (- org-lowest-priority priority)))
+          (pri-current (org-get-priority (thing-at-point 'line t))))
+      (if (= pri-value pri-current)
+          subtree-end
+        nil)))
+
+  (setq org-agenda-custom-commands
+        '(("c" "Simple agenda view"
+           ((tags "PRIORITY=\"A\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "High priority unfinished tasks:")))
+            (agenda "")
+            (alltodo ""
+                     ((org-agenda-skip-function
+                       '(or (tim-org-skip-subtree-if-priority ?A)
+                            (org-agenda-skip-entry-if nil '(scheduled deadline))))))))))
   (add-hook 'org-mode-hook #'(lambda ()
                                (visual-line-mode)
                                (org-indent-mode)))
