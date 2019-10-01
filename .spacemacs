@@ -345,7 +345,7 @@ you should place your code here."
   (setq org-outline-path-complete-in-steps nil)
   (setq org-refile-allow-creating-parent-nodes 'confirm)
 
-  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+  (setq org-todo-keywords '((sequence "TODO(t)" "IN-PROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
   (setq org-agenda-files '("/mnt/c/Users/eleven/Dropbox/Work/Todo/todo.org"
                            "/mnt/c/Users/eleven/Dropbox/Work/remember.org"
                            "/mnt/c/Users/eleven/Dropbox/Work/Todo/someday.org"
