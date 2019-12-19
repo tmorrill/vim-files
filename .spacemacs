@@ -51,7 +51,8 @@ values."
      ;; git
      ;; markdown
      (org :variables
-          org-enable-org-journal-support t)
+          org-enable-org-journal-support t
+          org-projectile-file "TODOs.org")
 
      (shell :variables
              shell-default-height 30
@@ -350,6 +351,33 @@ you should place your code here."
                            "/mnt/c/Users/eleven/Dropbox/Work/remember.org"
                            "/mnt/c/Users/eleven/Dropbox/Work/Todo/someday.org"
                            "/mnt/c/Users/eleven/Dropbox/Work/goals.org"))
+  (setq org-agenda-files (append org-agenda-files (org-projectile-todo-file(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-agenda-files
+   (quote
+    ("/mnt/c/Users/eleven/Dropbox/Work/Todo/todo.org" "/mnt/c/Users/eleven/Dropbox/Work/remember.org" "/mnt/c/Users/eleven/Dropbox/Work/Todo/someday.org" "/mnt/c/Users/eleven/Dropbox/Work/goals.org" "~/.emacs.d/TODOs.org" "/mnt/c/Users/eleven/source/repos/ProductDataSkuLevel/TODOs.org" "/mnt/c/Users/eleven/source/repos/vue-todomvc/TODOs.org" "/mnt/c/Users/eleven/source/repos/venus-camel/TODOs.org" "/mnt/c/Users/eleven/source/repos/squidex-samples/TODOs.org" "/mnt/c/Users/eleven/source/repos/squidex-docker/TODOs.org" "/mnt/c/Users/eleven/source/repos/cachebuster/TODOs.org" "/mnt/c/Users/eleven/source/repos/book/TODOs.org" "/mnt/c/Users/eleven/source/repos/VenusTransfer-Modularized/TODOs.org" "/mnt/c/Users/eleven/source/repos/VenusShip/TODOs.org" "/mnt/c/Users/eleven/source/repos/VenusIdentity/TODOs.org" "/mnt/c/Users/eleven/source/repos/VenusDotNet.Database/TODOs.org" "/mnt/c/Users/eleven/source/repos/VenusDesktopWebApp/TODOs.org" "/mnt/c/Users/eleven/source/repos/Venus2017/TODOs.org" "/mnt/c/Users/eleven/source/repos/VCM2/TODOs.org" "/mnt/c/Users/eleven/source/repos/RestServiceCommunication/TODOs.org" "/mnt/c/Users/eleven/source/repos/RavenDB_JSON_Loader/TODOs.org" "/mnt/c/Users/eleven/source/repos/ProductPrototype/TODOs.org" "/mnt/c/Users/eleven/source/repos/ProductDataModel/TODOs.org" "/mnt/c/Users/eleven/source/repos/PowerReviewsOrderFeed/TODOs.org" "/mnt/c/Users/eleven/source/repos/LoadDemandData/TODOs.org" "/mnt/c/Users/eleven/source/repos/ImageResizerServer/TODOs.org" "/mnt/c/Users/eleven/source/repos/IdentityServerQuickStarts/TODOs.org" "/mnt/c/Users/eleven/source/repos/FtpProcess/TODOs.org" "/mnt/c/Users/eleven/source/repos/DepartmentSortEngine/TODOs.org" "/mnt/c/Users/eleven/source/repos/DefaultSortEngine/TODOs.org" "/mnt/c/Users/eleven/source/repos/CreateReleaseNote/TODOs.org" "/mnt/c/Users/eleven/source/repos/20171025_RickBranch_Ajax/TODOs.org" "/mnt/c/Users/eleven/source/repos/GettingStartedWithVue/vue-getting-started/TODOs.org" "/mnt/c/Users/eleven/source/repos/GettingStartedWithVue/hello-vue/TODOs.org")))
+ '(org-capture-templates
+   (quote
+    (("t" "Personal Task" entry
+      (file+headline "/mnt/c/Users/eleven/Dropbox/Work/Todo/todo.org" "Personal Tasks")
+      "* TODO %i%?")
+     ("r" "Remember" entry
+      (file+headline "/mnt/c/Users/eleven/Dropbox/Work/remember.org" "Remember")
+      "* %i%? 
+ %U"))))
+ '(package-selected-packages
+   (quote
+    (noflet mvn meghanada maven-test-mode groovy-mode groovy-imports pcache gradle-mode ensime sbt-mode scala-mode company-emacs-eclim eclim json-navigator hierarchy json-mode json-snatcher json-reformat company-tern dash-functional tern livid-mode skewer-mode js2-refactor multiple-cursors js2-mode js-doc helm-gtags ggtags counsel-gtags add-node-modules-path confluence xml-rpc plantuml-mode org-brain evil-matchit doom-modeline eldoc-eval auto-compile goto-chg projectile org-plus-contrib yasnippet-snippets xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit symon string-inflection spaceline-all-the-icons slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs request rainbow-delimiters pug-mode prettier-js popwin persp-mode pcre2el password-generator paradox packed ox-jira overseer org-projectile org-present org-pomodoro org-mime org-journal org-download org-bullets open-junk-file omnisharp neotree nameless multi-term move-text macrostep lorem-ipsum link-hint indent-guide impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-mode-manager helm-make helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot fuzzy font-lock+ flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode diminish define-word counsel-projectile company-web company-statistics column-enforce-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)s)))
 
   (defun tim-org-skip-subtree-if-priority (priority)
     "Skip an agenda subtree if it has a priority of PRIORITY.
@@ -404,27 +432,4 @@ PRIORITY may be on of the characters ?A ?B, or ?C."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-capture-templates
-   (quote
-    (("t" "Personal Task" entry
-      (file+headline "/mnt/c/Users/eleven/Dropbox/Work/Todo/todo.org" "Personal Tasks")
-      "* TODO %i%?")
-     ("r" "Remember" entry
-      (file+headline "/mnt/c/Users/eleven/Dropbox/Work/remember.org" "Remember")
-      "* %i%? 
- %U"))))
- '(package-selected-packages
-   (quote
-    (noflet mvn meghanada maven-test-mode groovy-mode groovy-imports pcache gradle-mode ensime sbt-mode scala-mode company-emacs-eclim eclim json-navigator hierarchy json-mode json-snatcher json-reformat company-tern dash-functional tern livid-mode skewer-mode js2-refactor multiple-cursors js2-mode js-doc helm-gtags ggtags counsel-gtags add-node-modules-path confluence xml-rpc plantuml-mode org-brain evil-matchit doom-modeline eldoc-eval auto-compile goto-chg projectile org-plus-contrib yasnippet-snippets xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit symon string-inflection spaceline-all-the-icons slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs request rainbow-delimiters pug-mode prettier-js popwin persp-mode pcre2el password-generator paradox packed ox-jira overseer org-projectile org-present org-pomodoro org-mime org-journal org-download org-bullets open-junk-file omnisharp neotree nameless multi-term move-text macrostep lorem-ipsum link-hint indent-guide impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-mode-manager helm-make helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot fuzzy font-lock+ flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode diminish define-word counsel-projectile company-web company-statistics column-enforce-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol aggressive-indent ace-window ace-link ace-jump-helm-line ac-ispell))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
+
